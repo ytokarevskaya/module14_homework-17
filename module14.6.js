@@ -2,7 +2,12 @@ function usePromise() {
     // Создаем promise
     const myPromise = new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve(Math.floor(Math.random() * 101));
+        let number = Math.floor(Math.random() * 101);
+        if (number % 2 === 0) {
+          resolve(number);
+        } else {
+          reject(number);
+        }
       }, 3000);
   
     });
@@ -10,18 +15,15 @@ function usePromise() {
   
     myPromise
       .then((result) => {
-        if (result % 2 == 0) {
           console.log(`Завершено успешно. Сгенерированное число — ${result}`);
-        } else {
-          console.log(`Завершено с ошибкой. Сгенерированное число — ${result}`);
-        }
-  
       })
-      .catch((error) => {
-        console.log('Обрабатываем reject', error);
+      .catch((result) => {
+        console.log(`Завершено с ошибкой. Сгенерированное число — ${result}`);
       })
   
   }
   
   usePromise();
-  
+
+
+// Не совсем верно, т.к. несмотря на выводимое сообщение, промис по факту всегда завершается успешно, потому что вы используете только функцию resolve в конструкторе промиса, функция reject ни разу не вызывается. Исправила на правильный вариант

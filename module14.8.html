@@ -94,6 +94,10 @@
         const btn = document.querySelector("#button");
         const output = document.querySelector(".result");
         
+        if (localStorage.getItem('images')) {
+            output.innerHTML = localStorage.getItem('images');
+        }
+        
         function sendRequest() {
             if (validateInput()){
                 fetch(` https://picsum.photos/v2/list?page=${page.value}&limit=${limit.value}`)
@@ -119,9 +123,9 @@
                             
                         });
                         output.innerHTML = cards;
+                        localStorage.setItem('images', cards);
                     })
                     .catch(() => { console.log('error') });
-
             }
 
         }
@@ -135,12 +139,10 @@
             } else if(page.value > 10 || page.value < 1 ){
                 alert("Номер страницы вне диапазона от 1 до 10");
                 validated = false; 
-                } else if(limit.value > 10 || limit.value < 1 ){
-                        alert("Лимит вне диапазона от 1 до 10");
-                        validated = false;
-                    } else {
-
-                    }
+            } else if(limit.value > 10 || limit.value < 1 ){
+                alert("Лимит вне диапазона от 1 до 10");
+                validated = false;
+            } // пустые ответления условий нужно убирать, чтобы не засорять код
             return validated;
         } 
              
@@ -149,6 +151,7 @@
     }
 
         document.addEventListener("DOMContentLoaded", pageLoaded);   
+    // Задание выполнено не полностью. Не хватает логики с localStorage: программа должна запоминать последний успешный запрос и при повторном заходе на страницу показывать результат предыдущего запроса
     </script>
 </body>
 </html>

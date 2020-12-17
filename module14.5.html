@@ -19,8 +19,10 @@
     </div>
 
     <script>
+    // Задание сделано почти верно, но по условию после того, как имя пользователя было запрошено, страница должна "запомнить" его (с помощью localStorage) и больше не запрашивать, а выводить значение из localStorage.
     function myFunction() {
-        let name = prompt("Добро пожаловать! Назовите, пожалуйста, ваше имя");
+
+        let retreived = localStorage.getItem('storage');
         let today = new Date(),
             hour = today.getHours(),
             min = today.getMinutes(),
@@ -30,29 +32,22 @@
 
         let time = `${day}.${month}.${year} / ${hour}:${min}`;
 
-        let jsonString = {
-        'user': name,
-        'time': time
-        };
+        if (retreived) { // Можно чуть упростить условие, потому что значения null или undefined будут приравнены к false в условном операторе
+            var x = JSON.parse(retreived);
+            let timeSaved = x.time;
+            let nameSaved = x.user;
 
-        let retreived = localStorage.getItem('storage');
-
-        if (retreived !== null) {
-        var x = JSON.parse(retreived);
-        let timeSaved = x.time;
-        let nameSaved = x.user;
-
-            if (name == nameSaved) {
-                console.log(nameSaved);
-                console.log(timeSaved);
-                let msg = `"Добрый день, ${nameSaved}! Давно не виделись. В последний раз вы были у нас ${timeSaved}"`;
-                alert(msg);
-            } else {
-                localStorage.setItem('storage', JSON.stringify(jsonString));
-            }
-
+            let msg = `"Добрый день, ${nameSaved}! Давно не виделись. В последний раз вы были у нас ${timeSaved}"`;
+            alert(msg);
+            localStorage.setItem('storage', JSON.stringify({user: nameSaved, time: time}));
         } else {
-        localStorage.setItem('storage', JSON.stringify(jsonString));
+            let name = prompt("Добро пожаловать! Назовите, пожалуйста, ваше имя");
+
+            let jsonString = {
+            'user': name,
+            'time': time
+            };
+            localStorage.setItem('storage', JSON.stringify(jsonString));
         }
     }
    

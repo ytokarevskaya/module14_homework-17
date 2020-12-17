@@ -52,44 +52,30 @@
         btn.addEventListener('click', () => {
        
         let num = document.getElementById("myText").value;
-        if(num == 3) {
         fetch(`https://jsonplaceholder.typicode.com/users/${num}/todos`)
             .then((response) => {
             const result = response.json();
             return result;
             })
             .then((data) => {
-          
-                let list = "";
-                data.forEach(element => {
-                    const listBlock =
-                    `<ul>
-                        <li>userId:${element.userId}</li>
-                        <li>id:${element.id}</li>
-                        <li>title:${element.title}</li>
-                        <li class="completed">completed:${element.completed}</li>
-                    </ul>`;
-                    list = list + listBlock;
-                
-                });
-                result.innerHTML = list;
-                const listItems = document.querySelectorAll('ul .completed');
-                for (let i = 0; i < listItems.length; i++) {
-                 //console.log (listItems[i].textContent);
-                    if(listItems[i].textContent == "completed:true"){
-                        listItems[i].style.textDecoration = "underline";
-                    }
+                if (data.length) {
+                    let list = '<ul>';
+                    data.forEach(element => {
+                        const listBlock = element.completed? `<li><strike>${element.title}</strike></li>` : `<li>${element.title}</li>`;
+                        list = list + listBlock;
+                    
+                    });
+                    result.innerHTML = list + '</ul>';
+                } else {
+                    alert("Пользователь с указанным id не найден");
                 }
-
             })
             .catch(() => { console.log('error') });
-        } else{
-            alert("Пользователь с указанным id не найден")
-        }
-            
         });
 
-      
+      // Задание выполнено не верно. Во-первых, задачи должны выводиться не только для id = 3, но и для любого другого значения, если пользователь с введенным id существует.
+      // Во-вторых, формат вывода данных не соответствует заданию. Должен выводиться только текст задачи, выполненные задачи должны быть написаны зачеркнутым текстом.
+      // Выше исправила
 
     </script>
 </body>
